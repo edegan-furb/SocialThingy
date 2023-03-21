@@ -1,6 +1,6 @@
 Social Media MERN App ( Instagram look-alike)
 
-*M*ongodb
-Express
-Redux
-Node
+*M*ongodb /n
+*E*xpress
+*R*edux
+*N*ode
