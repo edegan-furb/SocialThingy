@@ -47,6 +47,8 @@ const PostWidget = ({
     dispatch(setPost({ post: updatedPost }));
   };
 
+  const isCurrentUserPost = postUserId === loggedInUserId;
+
   return (
     <WidgetWrapper m="2rem 0">
       <Friend

@@ -35,17 +35,18 @@ export const addRemoveFriend = async (req, res) => {
   try {
     const { id, friendId } = req.params;
     const user = await User.findById(id);
-    const friend = await User.findById(friendId);
 
-    if (user.friends.includes(friendId)) {
-      user.friends = user.friends.filter((id) => id !== friendId);
-      friend.friends = friend.friends.filter((id) => id !== id);
+    if (id === friendId) {
+      return res.status(404).json({ message: "You can't add yourself as a friend" });
+    }
+    const friendIndex = user.friends.indexOf(friendId);
+    if (friendIndex !== -1) {
+      user.friends.splice(friendIndex, 1);
     } else {
       user.friends.push(friendId);
-      friend.friends.push(id);
     }
+
     await user.save();
-    await friend.save();
 
     const friends = await Promise.all(
       user.friends.map((id) => User.findById(id))
@@ -58,6 +59,6 @@ export const addRemoveFriend = async (req, res) => {
 
     res.status(200).json(formattedFriends);
   } catch (err) {
-    res.status(404).json({ message: err.message });
+    res.status(500).json({ message: "An error occurred." });
   }
 };

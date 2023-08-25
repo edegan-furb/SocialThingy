@@ -22,6 +22,11 @@ const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
   const isFriend = friends.find((friend) => friend._id === friendId);
 
   const patchFriend = async () => {
+    if (_id === friendId) {
+      console.error("Cannot add/remove yourself as a friend.");
+      return;
+    }
+  
     const response = await fetch(
       `http://localhost:3001/users/${_id}/${friendId}`,
       {
@@ -35,6 +40,8 @@ const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
     const data = await response.json();
     dispatch(setFriends({ friends: data }));
   };
+
+  const isCurrentUserFriend = friendId === _id;
 
   return (
     <FlexBetween>
@@ -64,6 +71,7 @@ const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
           </Typography>
         </Box>
       </FlexBetween>
+      {!isCurrentUserFriend && (
       <IconButton
         onClick={() => patchFriend()}
         sx={{ backgroundColor: primaryLight, p: "0.6rem" }}
@@ -74,6 +82,7 @@ const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
           <PersonAddOutlined sx={{ color: primaryDark }} />
         )}
       </IconButton>
+      )}
     </FlexBetween>
   );
 };
