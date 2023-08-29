@@ -1,5 +1,23 @@
 import Post from "../models/Post.js";
 import User from "../models/User.js";
+import Notification from "../models/Notification.js";
+
+
+const sendPostNotificationsToFriends = async (user, postDescription) => {
+  const friends = await User.find({ _id: { $in: user.friends } });
+  const notificationContent = `${user.firstName} ${user.lastName} added a new post: ${postDescription}`;
+
+  for (const friend of friends) {
+    const newNotification = new Notification({
+      userId: friend._id,
+      type: "new_post",
+      content: notificationContent,
+    });
+    await newNotification.save();
+    friend.notifications.push(newNotification._id);
+    await friend.save();
+  }
+};
 
 /* CREATE */
 export const createPost = async (req, res) => {
@@ -18,6 +36,7 @@ export const createPost = async (req, res) => {
       comments: [],
     });
     await newPost.save();
+    await sendPostNotificationsToFriends(user, description);
 
     const post = await Post.find();
     res.status(201).json(post);

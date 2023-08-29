@@ -33,12 +33,18 @@ const UserSchema = new mongoose.Schema(
       type: Array,
       default: [],
     },
+    notifications: [
+      {
+        type: String,
+        ref: "Notification",
+      },
+    ],
     location: String,
     occupation: String,
     viewedProfile: Number,
     impressions: Number,
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 const User = mongoose.model("User", UserSchema);
