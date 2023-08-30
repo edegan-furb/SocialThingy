@@ -50,7 +50,7 @@ const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
     const response = await fetch(
       `http://localhost:3001/users/${_id}/friend-request/${friendId}`,
       {
-        method: "POST",
+        method: "PATCH",
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
