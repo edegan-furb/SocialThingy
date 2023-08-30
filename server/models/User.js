@@ -39,12 +39,20 @@ const UserSchema = new mongoose.Schema(
         ref: "Notification",
       },
     ],
+    friendRequests: {
+      type: Array,
+      default: [], // This array will store the IDs of accepted friends
+    },
+    pendingFriendRequests: {
+      type: Array,
+      default: [], // This array will store the IDs of users who sent friend requests
+    },
     location: String,
     occupation: String,
     viewedProfile: Number,
     impressions: Number,
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
 const User = mongoose.model("User", UserSchema);
