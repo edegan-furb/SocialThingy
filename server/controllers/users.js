@@ -1,7 +1,7 @@
 import User from "../models/User.js";
 import Notification from "../models/Notification.js";
 
-/* READ */
+// Obter perfil de usuario
 export const getUser = async (req, res) => {
   try {
     const { id } = req.params;
@@ -12,15 +12,18 @@ export const getUser = async (req, res) => {
   }
 };
 
-/* READ */
+// Obter lista de amigos do usuário
 export const getUserFriends = async (req, res) => {
   try {
     const { id } = req.params;
     const user = await User.findById(id);
 
+    // Buscar informações detalhadas sobre os amigos do usuário
     const friends = await Promise.all(
       user.friends.map((id) => User.findById(id))
     );
+
+    // Formatar dados dos amigos para a resposta
     const formattedFriends = friends.map(
       ({ _id, firstName, lastName, occupation, location, picturePath }) => {
         return { _id, firstName, lastName, occupation, location, picturePath };
@@ -32,27 +35,32 @@ export const getUserFriends = async (req, res) => {
   }
 };
 
-/* UDPATE */
+// Enviar um pedido de amizade para outro usuário
 export const sendFriendRequest = async (req, res) => {
   try {
     const { id, friendId } = req.params;
     const user = await User.findById(id);
     const friend = await User.findById(friendId);
 
+    // Verificar se o remetente e o destinatário são o mesmo usuário
     if (id === friendId) {
       return res
         .status(400)
         .json({ message: "You can't send a friend request to yourself" });
     }
 
+    // Verificar se o pedido de amizade já foi enviado
     if (user.friendRequests.includes(friend._id)) {
       return res
         .status(400)
         .json({ message: "Friend request already sent to this user" });
     }
 
+    // Atualizar arrays de pedidos de amizade do remetente e do destinatário
     user.friendRequests.push(friend._id);
-    friend.pendingFriendRequests.push(user._id); // Add to recipient's array
+    friend.pendingFriendRequests.push(user._id); 
+    
+    //Criar uma notificação para o pedido de amizade
     const notificationContent = `${user.firstName} ${user.lastName} sent you a friend request.`;
     const newNotification = new Notification({
       userId: friend._id,
@@ -71,25 +79,28 @@ export const sendFriendRequest = async (req, res) => {
   }
 };
 
-/* UDPATE */
+// Aceitar um pedido de amizade de outro usuário
 export const acceptFriendRequest = async (req, res) => {
   try {
     const { id, requestId } = req.params;
     const user = await User.findById(id);
     const requester = await User.findById(requestId);
 
+    // Verificar se o pedido de amizade existe na lista de usuário
     if (!user.friendRequests.includes(requester._id)) {
       return res.status(400).json({
         message: "You have not received a friend request from this user",
       });
     }
 
+    // Remover pedido de amizade da lista do remetente e adicionar como amigo
     user.friendRequests = user.friendRequests.filter(
       (id) => id.toString() !== requester._id.toString()
     );
     user.friends.push(requester._id);
     requester.friends.push(user._id);
 
+    // Criar notificação para pedido de amizade aceito
     const notificationContent = `${user.firstName} ${user.lastName} accepted your friend request.`;
     const newNotification = new Notification({
       userId: requester._id,
@@ -108,26 +119,26 @@ export const acceptFriendRequest = async (req, res) => {
   }
 };
 
-/* DELETE */
+// Recusar um pedido de amizade de outro usuário
 export const declineFriendRequest = async (req, res) => {
   try {
     const { id, friendId } = req.params;
     const user = await User.findById(id);
     const friend = await User.findById(friendId);
 
-    // Remove the declined friend request from the recipient's pending requests
+    // Remover pedido de amizade recusado da lista de pedidos do destinatário
     friend.pendingFriendRequests = friend.pendingFriendRequests.filter(
       (requestId) => requestId.toString() !== user._id.toString()
     );
     await friend.save();
 
-    // Remove the declined friend request from the user's friend requests
+    // Remover pedido de amizade recusado da lista de pedidos do remetente
     user.friendRequests = user.friendRequests.filter(
       (requestId) => requestId.toString() !== friend._id.toString()
     );
     await user.save();
 
-    // Create a notification for the declined request
+    // Criar notificação para o pedido de amizade recusado
     const notificationContent = `${user.firstName} ${user.lastName} declined your friend request.`;
     const newNotification = new Notification({
       userId: friend._id,
@@ -143,56 +154,3 @@ export const declineFriendRequest = async (req, res) => {
     res.status(500).json({ message: "An error occurred." });
   }
 };
-/* UPDATE */
-// export const addRemoveFriend = async (req, res) => {
-//   try {
-//     const { id, friendId } = req.params;
-//     const user = await User.findById(id);
-//     const friend = await User.findById(friendId);
-
-//     if (id === friendId) {
-//       return res
-//         .status(404)
-//         .json({ message: "You can't add yourself as a friend" });
-//     }
-//     const friendIndex = user.friends.indexOf(friendId);
-//     if (friendIndex !== -1) {
-//       user.friends.splice(friendIndex, 1);
-
-//       const notificationContent = `${friend.firstName} ${friend.lastName} is no longer your friend.`;
-//       const newNotification = new Notification({
-//         userId: id,
-//         type: "friend_removed",
-//         content: notificationContent,
-//       });
-//       await newNotification.save();
-//       user.notifications.push(newNotification._id);
-//     } else {
-//       user.friends.push(friendId);
-
-//       const notificationContent = `You are now friends with ${friend.firstName} ${friend.lastName}.`;
-//       const newNotification = new Notification({
-//         userId: id,
-//         type: "friend_added",
-//         content: notificationContent,
-//       });
-//       await newNotification.save();
-//       user.notifications.push(newNotification._id);
-//     }
-
-//     await user.save();
-
-//     const friends = await Promise.all(
-//       user.friends.map((id) => User.findById(id))
-//     );
-//     const formattedFriends = friends.map(
-//       ({ _id, firstName, lastName, occupation, location, picturePath }) => {
-//         return { _id, firstName, lastName, occupation, location, picturePath };
-//       }
-//     );
-
-//     res.status(200).json(formattedFriends);
-//   } catch (err) {
-//     res.status(500).json({ message: "An error occurred." });
-//   }
-// };
