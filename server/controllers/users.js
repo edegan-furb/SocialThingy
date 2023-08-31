@@ -44,35 +44,55 @@ export const addRemoveFriend = async (req, res) => {
 
     if (id === friendId) {
       return res
-        .status(404)
+        .status(400)
         .json({ message: "You can't add yourself as a friend" });
     }
+
     const friendIndex = user.friends.indexOf(friendId);
     if (friendIndex !== -1) {
       user.friends.splice(friendIndex, 1);
 
-      const notificationContent = `${friend.firstName} ${friend.lastName} is no longer your friend.`;
-      const newNotification = new Notification({
+      const userNotificationContent = `${friend.firstName} ${friend.lastName} is no longer your friend.`;
+      const userNotification = new Notification({
         userId: id,
         type: "friend_removed",
-        content: notificationContent,
+        content: userNotificationContent,
       });
-      await newNotification.save();
-      user.notifications.push(newNotification._id);
+      await userNotification.save();
+      user.notifications.push(userNotification._id);
+
+      const friendNotificationContent = `${user.firstName} ${user.lastName} removed you as a friend.`;
+      const friendNotification = new Notification({
+        userId: friendId,
+        type: "friend_removed",
+        content: friendNotificationContent,
+      });
+      await friendNotification.save();
+      friend.notifications.push(friendNotification._id);
     } else {
       user.friends.push(friendId);
 
-      const notificationContent = `You are now friends with ${friend.firstName} ${friend.lastName}.`;
-      const newNotification = new Notification({
+      const userNotificationContent = `You are now friends with ${friend.firstName} ${friend.lastName}.`;
+      const userNotification = new Notification({
         userId: id,
         type: "friend_added",
-        content: notificationContent,
+        content: userNotificationContent,
       });
-      await newNotification.save();
-      user.notifications.push(newNotification._id);
+      await userNotification.save();
+      user.notifications.push(userNotification._id);
+
+      const friendNotificationContent = `${user.firstName} ${user.lastName} added you as a friend.`;
+      const friendNotification = new Notification({
+        userId: friendId,
+        type: "friend_added",
+        content: friendNotificationContent,
+      });
+      await friendNotification.save();
+      friend.notifications.push(friendNotification._id);
     }
 
     await user.save();
+    await friend.save();
 
     const friends = await Promise.all(
       user.friends.map((id) => User.findById(id))
