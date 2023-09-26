@@ -7,5 +7,5 @@ Social Media MERN App ( Instagram look-alike)
 <img src="https://github.com/devicons/devicon/blob/master/icons/nodejs/nodejs-original.svg" title="NodeJS" alt="NodeJS" width="45" height="45"/>&nbsp;
 </p>
 
-### M E R N
+&nbsp; M &nbsp;  E &nbsp;  R &nbsp;  N
 
