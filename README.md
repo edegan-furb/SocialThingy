@@ -1,6 +1,6 @@
 # Social MediaApp
 - Instagram look-alike
-- **M** **E** **R** **N**(mondodb, express, redux, nodejs)
+- **M** **E** **R** **N** (mondodb, express, redux, nodejs)
 
 ### Languages and Tools :
 <p>
