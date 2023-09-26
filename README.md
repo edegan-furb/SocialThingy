@@ -1,5 +1,6 @@
 # Social MediaApp
 - Instagram look-alike
+- JSON Web Token
 - **M** **E** **R** **N** (mondodb, express, redux, nodejs)
 
 ---
