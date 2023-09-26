@@ -1,4 +1,6 @@
-Social MediaApp ( Instagram look-alike)
+# Social MediaApp
+- Instagram look-alike
+- **M****E****R****N**
 
 ### Languages and Tools :
 <p>
