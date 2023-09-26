@@ -1,4 +1,6 @@
-Social Media MERN App ( Instagram look-alike)
+Social MediaApp ( Instagram look-alike)
+
+### Languages and Tools :
 <p>
 <img src="https://github.com/devicons/devicon/blob/master/icons/mongodb/mongodb-plain-wordmark.svg" title="Mongodb"  alt="Mongodb" width="45" height="45"/>&nbsp;
 <img src="https://github.com/devicons/devicon/blob/master/icons/express/express-original-wordmark.svg" title="Mongodb"  alt="Mongodb" width="45" height="45"/>&nbsp;
