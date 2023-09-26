@@ -1,5 +1,7 @@
 Social Media MERN App ( Instagram look-alike)
 
+---
+
 <p>
 <img src="https://github.com/devicons/devicon/blob/master/icons/mongodb/mongodb-plain-wordmark.svg" title="Mongodb"  alt="Mongodb" width="45" height="45"/>&nbsp;
 <img src="https://github.com/devicons/devicon/blob/master/icons/express/express-original-wordmark.svg" title="Mongodb"  alt="Mongodb" width="45" height="45"/>&nbsp;
