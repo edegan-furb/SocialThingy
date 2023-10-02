@@ -5,7 +5,7 @@
     <br/>
     JSON Web Token
      <br/>
-    **M** **E** **R** **N** (mondodb, express, redux, nodejs)
+    MERN(mondodb, express, redux, nodejs)
   </p>
   <p>
   <a href="https://github.com/edegan-furb/SocialThingy/graphs/contributors">
