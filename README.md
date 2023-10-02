@@ -5,7 +5,7 @@
     <br/>
     JSON Web Token
      <br/>
-    MERN(mondodb, express, redux, nodejs)
+   M(ondodb) E(xpress) R(edux) N(odejs)
   </p>
   <p>
   <a href="https://github.com/edegan-furb/SocialThingy/graphs/contributors">
@@ -32,19 +32,3 @@
 <img src="https://github.com/devicons/devicon/blob/master/icons/javascript/javascript-original.svg" title="Javascript" alt="Javascript " width="45" height="45"/>&nbsp;
 </p>
 </div>
-
-
-
-
-
-# Social MediaApp
-- Instagram look-alike
-- JSON Web Token
-- **M** **E** **R** **N** (mondodb, express, redux, nodejs)
-
----
-
-### Languages and Tools :
-
-
-
